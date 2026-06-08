@@ -1,0 +1,9 @@
+terraform {
+  backend "s3" {
+    bucket       = "uptime-kuma-terraform-state-ofek-CHANGE-ME"
+    key          = "uptime-kuma/backend/terraform.tfstate"
+    region       = "us-east-1"
+    encrypt      = true
+    use_lockfile = true
+  }
+}

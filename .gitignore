@@ -6,6 +6,8 @@
 *.tfstate
 *.tfstate.*
 crash.log
+*.tfvars
+!*.tfvars.example
 override.tf
 override.tf.json
 *_override.tf
@@ -16,7 +18,7 @@ override.tf.json
 *.auto.tfvars.json
 terraform.tfvars
 terraform.tfvars.json
-
+backend.tf
 # Terraform plans
 *.tfplan
 
