@@ -1,0 +1,54 @@
+output "vpc_id" {
+  description = "ID of the VPC."
+  value       = aws_vpc.this.id
+}
+
+output "vpc_cidr_block" {
+  description = "CIDR block of the VPC."
+  value       = aws_vpc.this.cidr_block
+}
+
+output "internet_gateway_id" {
+  description = "ID of the Internet Gateway."
+  value       = aws_internet_gateway.this.id
+}
+
+output "public_subnet_ids" {
+  description = "IDs of the public subnets."
+  value       = aws_subnet.public[*].id
+}
+
+output "private_app_subnet_ids" {
+  description = "IDs of the private application subnets."
+  value       = aws_subnet.private_app[*].id
+}
+
+output "private_data_subnet_ids" {
+  description = "IDs of the private data subnets."
+  value       = aws_subnet.private_data[*].id
+}
+
+output "public_route_table_id" {
+  description = "ID of the public route table."
+  value       = aws_route_table.public.id
+}
+
+output "private_app_route_table_id" {
+  description = "ID of the private application route table."
+  value       = aws_route_table.private_app.id
+}
+
+output "private_data_route_table_id" {
+  description = "ID of the private data route table."
+  value       = aws_route_table.private_data.id
+}
+
+output "nat_gateway_id" {
+  description = "ID of the NAT Gateway."
+  value       = var.enable_nat_gateway ? aws_nat_gateway.this[0].id : null
+}
+
+output "s3_gateway_endpoint_id" {
+  description = "ID of the S3 Gateway VPC Endpoint."
+  value       = var.enable_s3_gateway_endpoint ? aws_vpc_endpoint.s3[0].id : null
+}

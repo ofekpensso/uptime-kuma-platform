@@ -1,0 +1,33 @@
+project_name = "uptime-kuma"
+environment  = "dev"
+aws_region   = "us-east-1"
+owner        = "ofek"
+
+vpc_cidr = "10.0.0.0/16"
+
+availability_zones = [
+  "us-east-1a",
+  "us-east-1b"
+]
+
+public_subnet_cidrs = [
+  "10.0.1.0/24",
+  "10.0.2.0/24"
+]
+
+private_app_subnet_cidrs = [
+  "10.0.11.0/24",
+  "10.0.12.0/24"
+]
+
+private_data_subnet_cidrs = [
+  "10.0.21.0/24",
+  "10.0.22.0/24"
+]
+
+# Cost optimized lab setup:
+# Single NAT Gateway instead of one NAT Gateway per AZ.
+enable_nat_gateway = true
+
+# S3 Gateway Endpoint reduces NAT traffic for S3.
+enable_s3_gateway_endpoint = true
