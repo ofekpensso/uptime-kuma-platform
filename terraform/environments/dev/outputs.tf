@@ -92,3 +92,18 @@ output "rds_secret_arn" {
   description = "RDS credentials secret ARN."
   value       = module.rds_secret.secret_arn
 }
+
+output "ecr_repository_name" {
+  description = "ECR repository name."
+  value       = module.ecr.repository_name
+}
+
+output "ecr_repository_url" {
+  description = "ECR repository URL."
+  value       = module.ecr.repository_url
+}
+
+output "ecr_repository_arn" {
+  description = "ECR repository ARN."
+  value       = module.ecr.repository_arn
+}

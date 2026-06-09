@@ -101,3 +101,11 @@ db_port                    = 3306
 db_multi_az                = false
 db_backup_retention_period = 1
 db_deletion_protection     = false
+
+# ECR
+ecr_repository_name      = "uptime-kuma"
+ecr_image_tag_mutability = "IMMUTABLE"
+ecr_scan_on_push         = true
+ecr_force_delete         = true
+ecr_keep_last_images     = 10
+ecr_lifecycle_tag_prefixes = ["sha-"]

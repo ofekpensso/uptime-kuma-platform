@@ -245,3 +245,48 @@ variable "db_deletion_protection" {
   type        = bool
   default     = false
 }
+
+# -----------------------------------------------------------------------------
+# ECR
+# -----------------------------------------------------------------------------
+
+variable "ecr_repository_name" {
+  description = "Name of the ECR repository."
+  type        = string
+  default     = "uptime-kuma"
+}
+
+variable "ecr_image_tag_mutability" {
+  description = "Image tag mutability setting for the ECR repository."
+  type        = string
+  default     = "IMMUTABLE"
+
+  validation {
+    condition     = contains(["MUTABLE", "IMMUTABLE"], var.ecr_image_tag_mutability)
+    error_message = "ecr_image_tag_mutability must be either MUTABLE or IMMUTABLE."
+  }
+}
+
+variable "ecr_scan_on_push" {
+  description = "Enable ECR image scan on push."
+  type        = bool
+  default     = true
+}
+
+variable "ecr_force_delete" {
+  description = "Delete the ECR repository even if it contains images."
+  type        = bool
+  default     = true
+}
+
+variable "ecr_keep_last_images" {
+  description = "Number of tagged images to keep in ECR."
+  type        = number
+  default     = 10
+}
+
+variable "ecr_lifecycle_tag_prefixes" {
+  description = "List of ECR tag prefixes that lifecycle policy applies to."
+  type        = list(string)
+  default     = ["sha-"]
+}
