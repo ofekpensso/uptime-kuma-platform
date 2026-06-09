@@ -34,6 +34,8 @@ Instead of pushing generic tags such as `latest`, the CI pipeline should push de
 ```text
 sha-a1b2c3d
 
+
+
 This makes deployments more reliable and easier to debug.
 
 Cost Optimization
