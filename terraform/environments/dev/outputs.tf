@@ -32,3 +32,23 @@ output "s3_gateway_endpoint_id" {
   description = "ID of the S3 Gateway VPC Endpoint."
   value       = module.vpc.s3_gateway_endpoint_id
 }
+
+output "alb_security_group_id" {
+  description = "ID of the ALB security group."
+  value       = module.security_groups.alb_security_group_id
+}
+
+output "eks_security_group_id" {
+  description = "ID of the EKS security group."
+  value       = module.security_groups.eks_security_group_id
+}
+
+output "rds_security_group_id" {
+  description = "ID of the RDS security group."
+  value       = module.security_groups.rds_security_group_id
+}
+
+output "vpc_endpoints_security_group_id" {
+  description = "ID of the VPC Endpoints security group."
+  value       = module.security_groups.vpc_endpoints_security_group_id
+}

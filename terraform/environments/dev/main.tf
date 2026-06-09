@@ -26,3 +26,22 @@ module "vpc" {
 
   tags = local.common_tags
 }
+
+
+module "security_groups" {
+  source = "../../modules/security-groups"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_id         = module.vpc.vpc_id
+  vpc_cidr_block = module.vpc.vpc_cidr_block
+
+  app_port      = var.app_port
+  database_port = var.database_port
+
+  allowed_http_cidr_blocks  = var.allowed_http_cidr_blocks
+  allowed_https_cidr_blocks = var.allowed_https_cidr_blocks
+
+  tags = local.common_tags
+}

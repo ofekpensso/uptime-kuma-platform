@@ -63,3 +63,27 @@ variable "enable_s3_gateway_endpoint" {
   type        = bool
   default     = true
 }
+
+variable "app_port" {
+  description = "Application port exposed by Uptime Kuma."
+  type        = number
+  default     = 3001
+}
+
+variable "database_port" {
+  description = "PostgreSQL database port."
+  type        = number
+  default     = 5432
+}
+
+variable "allowed_http_cidr_blocks" {
+  description = "CIDR blocks allowed to access ALB on HTTP."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}
+
+variable "allowed_https_cidr_blocks" {
+  description = "CIDR blocks allowed to access ALB on HTTPS."
+  type        = list(string)
+  default     = ["0.0.0.0/0"]
+}

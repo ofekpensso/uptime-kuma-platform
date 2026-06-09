@@ -31,3 +31,20 @@ enable_nat_gateway = true
 
 # S3 Gateway Endpoint reduces NAT traffic for S3.
 enable_s3_gateway_endpoint = true
+
+# Uptime Kuma default application port
+app_port = 3001
+
+# PostgreSQL default port
+database_port = 5432
+
+# Public ALB access
+# Lab setup: open to the internet.
+# Production: restrict if possible, or use WAF.
+allowed_http_cidr_blocks = [
+  "0.0.0.0/0"
+]
+
+allowed_https_cidr_blocks = [
+  "0.0.0.0/0"
+]
