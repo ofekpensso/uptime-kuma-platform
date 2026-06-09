@@ -39,8 +39,9 @@ module "security_groups" {
   vpc_id         = module.vpc.vpc_id
   vpc_cidr_block = module.vpc.vpc_cidr_block
 
-  app_port = var.app_port
-  rds_port = var.db_port
+  app_port                   = var.app_port
+  rds_port                   = var.db_port
+  eks_node_security_group_id = module.eks.node_security_group_id
 
   allowed_http_cidr_blocks  = var.allowed_http_cidr_blocks
   allowed_https_cidr_blocks = var.allowed_https_cidr_blocks
@@ -54,7 +55,7 @@ module "rds_secret" {
   name        = "${local.name_prefix}/rds/credentials"
   description = "RDS credentials for ${local.name_prefix}"
 
-  recovery_window_in_days = 7
+  recovery_window_in_days = 0
 
   tags = local.common_tags
 }

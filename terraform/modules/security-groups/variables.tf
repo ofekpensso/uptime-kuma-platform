@@ -53,3 +53,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "eks_node_security_group_id" {
+  description = "Actual EKS node security group ID allowed to access RDS."
+  type        = string
+}

@@ -122,14 +122,14 @@ resource "aws_security_group" "rds" {
   )
 }
 
-resource "aws_vpc_security_group_ingress_rule" "rds_from_eks" {
+resource "aws_vpc_security_group_ingress_rule" "rds_from_eks_nodes" {
   security_group_id = aws_security_group.rds.id
 
-  description                  = "Allow PostgreSQL traffic from EKS"
+  description                  = "Allow MariaDB traffic from EKS worker nodes"
   from_port                    = var.rds_port
   to_port                      = var.rds_port
   ip_protocol                  = "tcp"
-  referenced_security_group_id = aws_security_group.eks.id
+  referenced_security_group_id = var.eks_node_security_group_id
 }
 
 resource "aws_vpc_security_group_egress_rule" "rds_all_outbound" {

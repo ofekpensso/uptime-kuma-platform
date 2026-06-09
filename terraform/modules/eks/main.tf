@@ -128,36 +128,36 @@ module "eks" {
   enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
 
   addons = {
-  vpc-cni = {
-    most_recent    = true
-    before_compute = true
+    vpc-cni = {
+      most_recent    = true
+      before_compute = true
+    }
+
+    kube-proxy = {
+      most_recent = true
+    }
+
+    coredns = {
+      most_recent = true
+    }
+
+    eks-pod-identity-agent = {
+      most_recent = true
+    }
+
+    aws-ebs-csi-driver = {
+      most_recent = true
+
+      pod_identity_association = [{
+        role_arn        = aws_iam_role.ebs_csi_driver.arn
+        service_account = "ebs-csi-controller-sa"
+      }]
+
+      depends_on = [
+        aws_iam_role_policy_attachment.ebs_csi_driver
+      ]
+    }
   }
-
-  kube-proxy = {
-    most_recent = true
-  }
-
-  coredns = {
-    most_recent = true
-  }
-
-  eks-pod-identity-agent = {
-    most_recent = true
-  }
-
-  aws-ebs-csi-driver = {
-    most_recent = true
-
-    pod_identity_association = [{
-      role_arn        = aws_iam_role.ebs_csi_driver.arn
-      service_account = "ebs-csi-controller-sa"
-    }]
-
-    depends_on = [
-      aws_iam_role_policy_attachment.ebs_csi_driver
-    ]
-  }
-}
 
   eks_managed_node_groups = local.eks_managed_node_groups
 
