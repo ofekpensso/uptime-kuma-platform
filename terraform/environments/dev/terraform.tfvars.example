@@ -48,3 +48,43 @@ allowed_http_cidr_blocks = [
 allowed_https_cidr_blocks = [
   "0.0.0.0/0"
 ]
+
+# -------------------------
+# EKS
+# -------------------------
+
+eks_cluster_version = "1.35"
+
+# Lab setup:
+# Public endpoint allows kubectl access from your local machine.
+# Private endpoint allows internal VPC access.
+eks_endpoint_public_access  = true
+eks_endpoint_private_access = true
+
+# Grants the IAM user/role running Terraform admin access to the cluster.
+enable_cluster_creator_admin_permissions = true
+
+# Cost-optimized but stable default node group.
+# If resources are too tight, keep t3.medium.
+# For aggressive cost saving, try t3.small.
+eks_node_instance_types = [
+  "t3.medium"
+]
+
+eks_node_capacity_type = "ON_DEMAND"
+
+eks_node_min_size     = 1
+eks_node_desired_size = 1
+eks_node_max_size     = 2
+
+eks_node_disk_size = 30
+
+# Spot support is prepared but disabled for now.
+enable_spot_node_group = false
+
+eks_spot_instance_types = [
+  "t3.medium",
+  "t3a.medium"
+
+eks_authentication_mode = "API_AND_CONFIG_MAP"  
+]

@@ -52,3 +52,33 @@ output "vpc_endpoints_security_group_id" {
   description = "ID of the VPC Endpoints security group."
   value       = module.security_groups.vpc_endpoints_security_group_id
 }
+
+output "eks_cluster_name" {
+  description = "EKS cluster name."
+  value       = module.eks.cluster_name
+}
+
+output "eks_cluster_endpoint" {
+  description = "EKS cluster endpoint."
+  value       = module.eks.cluster_endpoint
+}
+
+output "eks_cluster_version" {
+  description = "EKS cluster Kubernetes version."
+  value       = module.eks.cluster_version
+}
+
+output "eks_cluster_security_group_id" {
+  description = "EKS cluster security group ID."
+  value       = module.eks.cluster_security_group_id
+}
+
+output "eks_node_security_group_id" {
+  description = "EKS node security group ID."
+  value       = module.eks.node_security_group_id
+}
+
+output "eks_oidc_provider_arn" {
+  description = "EKS OIDC provider ARN for IRSA."
+  value       = module.eks.oidc_provider_arn
+}

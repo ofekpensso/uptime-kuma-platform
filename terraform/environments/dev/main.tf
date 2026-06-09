@@ -45,3 +45,34 @@ module "security_groups" {
 
   tags = local.common_tags
 }
+
+module "eks" {
+  source = "../../modules/eks"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+
+  cluster_version = var.eks_cluster_version
+
+  authentication_mode = var.eks_authentication_mode
+
+  endpoint_public_access  = var.eks_endpoint_public_access
+  endpoint_private_access = var.eks_endpoint_private_access
+
+  enable_cluster_creator_admin_permissions = var.enable_cluster_creator_admin_permissions
+
+  node_instance_types = var.eks_node_instance_types
+  node_capacity_type  = var.eks_node_capacity_type
+  node_min_size       = var.eks_node_min_size
+  node_desired_size   = var.eks_node_desired_size
+  node_max_size       = var.eks_node_max_size
+  node_disk_size      = var.eks_node_disk_size
+
+  enable_spot_node_group = var.enable_spot_node_group
+  spot_instance_types    = var.eks_spot_instance_types
+
+  tags = local.common_tags
+}

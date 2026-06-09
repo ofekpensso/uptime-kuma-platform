@@ -87,3 +87,91 @@ variable "allowed_https_cidr_blocks" {
   type        = list(string)
   default     = ["0.0.0.0/0"]
 }
+
+variable "eks_cluster_version" {
+  description = "Kubernetes version for the EKS cluster."
+  type        = string
+  default     = "1.35"
+}
+
+variable "eks_endpoint_public_access" {
+  description = "Whether the EKS API endpoint is publicly accessible."
+  type        = bool
+  default     = true
+}
+
+variable "eks_endpoint_private_access" {
+  description = "Whether the EKS API endpoint is privately accessible from inside the VPC."
+  type        = bool
+  default     = true
+}
+
+variable "enable_cluster_creator_admin_permissions" {
+  description = "Whether to grant the Terraform caller admin permissions in the EKS cluster."
+  type        = bool
+  default     = true
+}
+
+variable "eks_node_instance_types" {
+  description = "Instance types for the default EKS managed node group."
+  type        = list(string)
+  default     = ["t3.medium"]
+}
+
+variable "eks_node_capacity_type" {
+  description = "Capacity type for the default EKS managed node group."
+  type        = string
+  default     = "ON_DEMAND"
+
+  validation {
+    condition     = contains(["ON_DEMAND", "SPOT"], var.eks_node_capacity_type)
+    error_message = "eks_node_capacity_type must be either ON_DEMAND or SPOT."
+  }
+}
+
+variable "eks_node_min_size" {
+  description = "Minimum number of nodes in the default EKS managed node group."
+  type        = number
+  default     = 1
+}
+
+variable "eks_node_desired_size" {
+  description = "Desired number of nodes in the default EKS managed node group."
+  type        = number
+  default     = 1
+}
+
+variable "eks_node_max_size" {
+  description = "Maximum number of nodes in the default EKS managed node group."
+  type        = number
+  default     = 2
+}
+
+variable "eks_node_disk_size" {
+  description = "Disk size in GB for worker nodes."
+  type        = number
+  default     = 30
+}
+
+variable "enable_spot_node_group" {
+  description = "Whether to create an optional Spot managed node group."
+  type        = bool
+  default     = false
+}
+
+variable "eks_spot_instance_types" {
+  description = "Instance types for the optional Spot managed node group."
+  type        = list(string)
+  default     = ["t3.medium", "t3a.medium"]
+}
+
+variable "eks_authentication_mode" {
+  description = "EKS cluster authentication mode."
+  type        = string
+  default     = "API_AND_CONFIG_MAP"
+
+  validation {
+    condition     = contains(["CONFIG_MAP", "API_AND_CONFIG_MAP", "API"], var.eks_authentication_mode)
+    error_message = "eks_authentication_mode must be CONFIG_MAP, API_AND_CONFIG_MAP, or API."
+  }
+}
