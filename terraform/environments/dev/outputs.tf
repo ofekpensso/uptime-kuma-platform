@@ -82,3 +82,13 @@ output "eks_oidc_provider_arn" {
   description = "EKS OIDC provider ARN for IRSA."
   value       = module.eks.oidc_provider_arn
 }
+
+output "rds_endpoint" {
+  description = "RDS endpoint."
+  value       = module.rds.db_instance_endpoint
+}
+
+output "rds_secret_arn" {
+  description = "RDS credentials secret ARN."
+  value       = module.rds_secret.secret_arn
+}

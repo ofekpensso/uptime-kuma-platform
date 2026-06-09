@@ -111,3 +111,69 @@ variable "authentication_mode" {
     error_message = "authentication_mode must be CONFIG_MAP, API_AND_CONFIG_MAP, or API."
   }
 }
+
+variable "db_engine" {
+  description = "RDS engine."
+  type        = string
+  default     = "mariadb"
+}
+
+variable "db_engine_version" {
+  description = "RDS engine version."
+  type        = string
+  default     = null
+}
+
+variable "db_instance_class" {
+  description = "RDS instance class."
+  type        = string
+  default     = "db.t4g.micro"
+}
+
+variable "db_allocated_storage" {
+  description = "RDS allocated storage in GB."
+  type        = number
+  default     = 20
+}
+
+variable "db_max_allocated_storage" {
+  description = "RDS max allocated storage in GB."
+  type        = number
+  default     = 50
+}
+
+variable "db_name" {
+  description = "Application database name."
+  type        = string
+  default     = "uptimekuma"
+}
+
+variable "db_username" {
+  description = "RDS master username."
+  type        = string
+  default     = "uptimekuma_admin"
+}
+
+variable "db_port" {
+  description = "RDS database port."
+  type        = number
+  default     = 3306
+}
+
+variable "db_multi_az" {
+  description = "Enable RDS Multi-AZ."
+  type        = bool
+  default     = false
+}
+
+variable "db_backup_retention_period" {
+  description = "RDS backup retention in days."
+  type        = number
+  default     = 1
+}
+
+variable "db_deletion_protection" {
+  description = "Enable RDS deletion protection."
+  type        = bool
+  default     = false
+}

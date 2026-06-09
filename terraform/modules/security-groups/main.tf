@@ -126,8 +126,8 @@ resource "aws_vpc_security_group_ingress_rule" "rds_from_eks" {
   security_group_id = aws_security_group.rds.id
 
   description                  = "Allow PostgreSQL traffic from EKS"
-  from_port                    = var.database_port
-  to_port                      = var.database_port
+  from_port                    = var.rds_port
+  to_port                      = var.rds_port
   ip_protocol                  = "tcp"
   referenced_security_group_id = aws_security_group.eks.id
 }

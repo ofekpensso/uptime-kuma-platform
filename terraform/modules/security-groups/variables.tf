@@ -30,6 +30,12 @@ variable "database_port" {
   default     = 5432
 }
 
+variable "rds_port" {
+  description = "RDS database port."
+  type        = number
+  default     = 3306
+}
+
 variable "allowed_http_cidr_blocks" {
   description = "CIDR blocks allowed to access ALB on HTTP."
   type        = list(string)

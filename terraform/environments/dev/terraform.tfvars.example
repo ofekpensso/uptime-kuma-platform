@@ -88,3 +88,16 @@ eks_spot_instance_types = [
 
 eks_authentication_mode = "API_AND_CONFIG_MAP"  
 ]
+
+# RDS
+db_engine                  = "mariadb"
+db_engine_version          = null
+db_instance_class          = "db.t4g.micro"
+db_allocated_storage       = 20
+db_max_allocated_storage   = 50
+db_name                    = "uptimekuma"
+db_username                = "uptimekuma_admin"
+db_port                    = 3306
+db_multi_az                = false
+db_backup_retention_period = 1
+db_deletion_protection     = false
