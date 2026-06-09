@@ -39,12 +39,6 @@ variable "enable_nat_gateway" {
   default     = true
 }
 
-variable "enable_s3_gateway_endpoint" {
-  description = "Whether to create an S3 Gateway VPC Endpoint."
-  type        = bool
-  default     = true
-}
-
 variable "tags" {
   description = "Additional tags to apply to resources."
   type        = map(string)

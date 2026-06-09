@@ -23,8 +23,7 @@ module "vpc" {
   private_app_subnet_cidrs  = var.private_app_subnet_cidrs
   private_data_subnet_cidrs = var.private_data_subnet_cidrs
 
-  enable_nat_gateway         = var.enable_nat_gateway
-  enable_s3_gateway_endpoint = var.enable_s3_gateway_endpoint
+  enable_nat_gateway = var.enable_nat_gateway
 
   tags = local.common_tags
 }
@@ -58,6 +57,34 @@ module "security_groups" {
 
   allowed_http_cidr_blocks  = var.allowed_http_cidr_blocks
   allowed_https_cidr_blocks = var.allowed_https_cidr_blocks
+
+  tags = local.common_tags
+}
+
+module "vpc_endpoints" {
+  source = "../../modules/vpc-endpoint"
+
+  project_name = var.project_name
+  environment  = var.environment
+
+  vpc_id = module.vpc.vpc_id
+
+  private_subnet_ids = module.vpc.private_app_subnet_ids
+
+  route_table_ids = [
+    module.vpc.private_app_route_table_id,
+    module.vpc.private_data_route_table_id
+  ]
+
+  security_group_ids = [
+    module.security_groups.vpc_endpoints_security_group_id
+  ]
+
+  enable_s3_gateway_endpoint = var.enable_s3_gateway_endpoint
+  enable_ecr_api_endpoint    = true
+  enable_ecr_dkr_endpoint    = true
+
+  private_dns_enabled = true
 
   tags = local.common_tags
 }

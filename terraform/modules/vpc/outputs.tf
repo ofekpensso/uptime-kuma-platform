@@ -47,8 +47,3 @@ output "nat_gateway_id" {
   description = "ID of the NAT Gateway."
   value       = var.enable_nat_gateway ? aws_nat_gateway.this[0].id : null
 }
-
-output "s3_gateway_endpoint_id" {
-  description = "ID of the S3 Gateway VPC Endpoint."
-  value       = var.enable_s3_gateway_endpoint ? aws_vpc_endpoint.s3[0].id : null
-}

@@ -30,7 +30,17 @@ output "nat_gateway_id" {
 
 output "s3_gateway_endpoint_id" {
   description = "ID of the S3 Gateway VPC Endpoint."
-  value       = module.vpc.s3_gateway_endpoint_id
+  value       = module.vpc_endpoints.s3_gateway_endpoint_id
+}
+
+output "ecr_api_endpoint_id" {
+  description = "ID of the ECR API Interface VPC Endpoint."
+  value       = module.vpc_endpoints.ecr_api_endpoint_id
+}
+
+output "ecr_dkr_endpoint_id" {
+  description = "ID of the ECR Docker Interface VPC Endpoint."
+  value       = module.vpc_endpoints.ecr_dkr_endpoint_id
 }
 
 output "alb_security_group_id" {

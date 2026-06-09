@@ -161,11 +161,11 @@ resource "aws_security_group" "vpc_endpoints" {
 resource "aws_vpc_security_group_ingress_rule" "vpc_endpoints_https_from_eks" {
   security_group_id = aws_security_group.vpc_endpoints.id
 
-  description                  = "Allow HTTPS from EKS to VPC Interface Endpoints"
+  description                  = "Allow HTTPS from EKS worker nodes to VPC Interface Endpoints"
   from_port                    = 443
   to_port                      = 443
   ip_protocol                  = "tcp"
-  referenced_security_group_id = aws_security_group.eks.id
+  referenced_security_group_id = var.eks_node_security_group_id
 }
 
 resource "aws_vpc_security_group_egress_rule" "vpc_endpoints_all_outbound" {
