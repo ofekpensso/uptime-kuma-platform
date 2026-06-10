@@ -109,3 +109,8 @@ ecr_scan_on_push         = true
 ecr_force_delete         = true
 ecr_keep_last_images     = 10
 ecr_lifecycle_tag_prefixes = ["sha-"]
+
+# GitHub OIDC
+github_owner      = "your_name"
+github_repository = "uptime-kuma-app"
+github_branch     = "main"

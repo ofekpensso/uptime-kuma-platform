@@ -290,3 +290,22 @@ variable "ecr_lifecycle_tag_prefixes" {
   type        = list(string)
   default     = ["sha-"]
 }
+
+# -----------------------------------------------------------------------------
+# GitHub OIDC
+# -----------------------------------------------------------------------------
+
+variable "github_owner" {
+  description = "GitHub username or organization that owns the application repository."
+  type        = string
+}
+
+variable "github_repository" {
+  description = "GitHub application repository name allowed to assume the AWS IAM role."
+  type        = string
+}
+
+variable "github_branch" {
+  description = "GitHub branch allowed to assume the AWS IAM role."
+  type        = string
+}

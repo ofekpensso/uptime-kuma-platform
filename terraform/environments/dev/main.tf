@@ -41,6 +41,20 @@ module "ecr" {
   tags = local.common_tags
 }
 
+module "github_oidc" {
+  source = "../../modules/github-oidc"
+
+  github_owner      = var.github_owner
+  github_repository = var.github_repository
+  github_branch     = var.github_branch
+
+  role_name   = "${local.name_prefix}-github-actions-ecr-role"
+  policy_name = "${local.name_prefix}-github-actions-ecr-policy"
+
+  ecr_repository_arn = module.ecr.repository_arn
+
+  tags = local.common_tags
+}
 
 module "security_groups" {
   source = "../../modules/security-groups"

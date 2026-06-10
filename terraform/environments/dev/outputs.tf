@@ -117,3 +117,13 @@ output "ecr_repository_arn" {
   description = "ECR repository ARN."
   value       = module.ecr.repository_arn
 }
+
+output "github_actions_role_arn" {
+  description = "IAM role ARN used by GitHub Actions to push images to ECR."
+  value       = module.github_oidc.github_actions_role_arn
+}
+
+output "github_oidc_provider_arn" {
+  description = "GitHub OIDC provider ARN."
+  value       = module.github_oidc.github_oidc_provider_arn
+}
