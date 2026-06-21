@@ -1,0 +1,12 @@
+aws_region = "us-east-1"
+
+infrastructure_state_bucket = "REPLACE_WITH_TERRAFORM_STATE_BUCKET"
+infrastructure_state_key    = "REPLACE_WITH_INFRASTRUCTURE_STATE_KEY"
+
+project_name = "uptime-kuma"
+environment  = "dev"
+owner        = "REPLACE_WITH_OWNER"
+
+storage_class_name           = "gp3"
+storage_class_reclaim_policy = "Delete"
+storage_class_is_default     = false
