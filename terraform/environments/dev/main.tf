@@ -188,3 +188,16 @@ module "eks" {
 
   tags = local.common_tags
 }
+
+module "external_secrets_pod_identity" {
+  source = "../../modules/external-secrets-pod-identity"
+
+  cluster_name = module.eks.cluster_name
+
+  namespace            = "external-secrets"
+  service_account_name = "external-secrets"
+
+  role_name = "${var.project_name}-${var.environment}-external-secrets-role"
+
+  secret_arns = ["*"]
+}

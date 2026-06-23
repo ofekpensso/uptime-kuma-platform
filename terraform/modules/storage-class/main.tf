@@ -19,8 +19,8 @@ resource "kubernetes_storage_class_v1" "this" {
   storage_provisioner = var.storage_provisioner
 
   parameters = {
-    type                         = var.volume_type
-    encrypted                    = tostring(var.encrypted)
+    type                        = var.volume_type
+    encrypted                   = tostring(var.encrypted)
     "csi.storage.k8s.io/fstype" = var.file_system_type
   }
 

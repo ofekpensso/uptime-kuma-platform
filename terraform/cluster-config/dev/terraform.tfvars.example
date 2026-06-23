@@ -10,3 +10,20 @@ owner        = "REPLACE_WITH_OWNER"
 storage_class_name           = "gp3"
 storage_class_reclaim_policy = "Delete"
 storage_class_is_default     = false
+
+
+argocd_release_name     = "argocd"
+argocd_namespace        = "argocd"
+argocd_chart_version    = "9.5.9"
+argocd_manage_namespace = true
+
+argocd_server_service_type = "ClusterIP"
+
+argocd_install_crds = true
+argocd_keep_crds    = false
+
+argocd_controller_replicas      = 1
+argocd_server_replicas          = 1
+argocd_repo_server_replicas     = 1
+argocd_application_set_replicas = 1
+argocd_redis_ha_enabled         = false

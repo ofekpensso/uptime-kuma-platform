@@ -22,3 +22,28 @@ output "storage_class_volume_binding_mode" {
   description = "Volume binding mode used by the StorageClass."
   value       = module.gp3_storage_class.volume_binding_mode
 }
+
+output "argocd_release_name" {
+  description = "Name of the Argo CD Helm release."
+  value       = module.argocd.release_name
+}
+
+output "argocd_namespace" {
+  description = "Namespace where Argo CD is installed."
+  value       = module.argocd.namespace
+}
+
+output "argocd_chart_version" {
+  description = "Installed Argo CD Helm chart version."
+  value       = module.argocd.chart_version
+}
+
+output "argocd_status" {
+  description = "Current status of the Argo CD Helm release."
+  value       = module.argocd.status
+}
+
+output "argocd_server_service_type" {
+  description = "Kubernetes Service type used by the Argo CD server."
+  value       = module.argocd.server_service_type
+}

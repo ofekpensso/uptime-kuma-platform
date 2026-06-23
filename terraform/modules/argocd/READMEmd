@@ -1,0 +1,253 @@
+````markdown
+# Argo CD Terraform Module
+
+This module installs Argo CD into an existing Kubernetes cluster using the official Argo CD Helm chart.
+
+The module is intended for cluster bootstrap. Terraform installs Argo CD, and Argo CD subsequently manages applications and platform workloads from Git.
+
+## Architecture Role
+
+```text
+Terraform
+├── Creates the Kubernetes namespace
+└── Installs Argo CD using Helm
+
+Argo CD
+├── Manages application deployments
+├── Manages third-party Helm charts
+├── Detects configuration drift
+└── Synchronizes the cluster with Git
+````
+
+The module does not create:
+
+* An EKS cluster
+* AWS IAM resources
+* Application definitions
+* Git repository credentials
+* Ingress or load balancers
+* Application workloads
+
+## Default Configuration
+
+| Setting                 | Default                          |
+| ----------------------- | -------------------------------- |
+| Release name            | `argocd`                         |
+| Namespace               | `argocd`                         |
+| Chart repository        | Official Argo CD Helm repository |
+| Chart                   | `argo-cd`                        |
+| Chart version           | `9.5.9`                          |
+| Installation mode       | Non-HA                           |
+| Server replicas         | `1`                              |
+| Controller replicas     | `1`                              |
+| Repo server replicas    | `1`                              |
+| ApplicationSet replicas | `1`                              |
+| Redis HA                | Disabled                         |
+| Server Service type     | `ClusterIP`                      |
+| CRD installation        | Enabled                          |
+| Helm wait               | Enabled                          |
+| Helm timeout            | 600 seconds                      |
+
+## Namespace Management
+
+By default, Terraform directly manages the Argo CD namespace:
+
+```hcl
+manage_namespace = true
+```
+
+This gives Terraform explicit ownership of the namespace and allows it to delete the namespace during `terraform destroy`.
+
+When disabled, Helm creates the namespace instead:
+
+```hcl
+manage_namespace = false
+```
+
+A namespace created through Helm's `create_namespace` behavior may remain after the Helm release is removed.
+
+## Usage
+
+```hcl
+module "argocd" {
+  source = "../../modules/argocd"
+
+  release_name = "argocd"
+  namespace    = "argocd"
+
+  chart_version = "9.5.9"
+
+  server_service_type = "ClusterIP"
+
+  install_crds = true
+  keep_crds    = false
+
+  controller_replicas      = 1
+  server_replicas          = 1
+  repo_server_replicas     = 1
+  application_set_replicas = 1
+  redis_ha_enabled         = false
+
+  labels = {
+    project     = "uptime-kuma"
+    environment = "dev"
+    managed-by  = "terraform"
+  }
+}
+```
+
+## Additional Helm Values
+
+Additional values may be supplied as raw YAML strings.
+
+Values provided through `additional_values` are merged after the module's base values and can therefore override them.
+
+```hcl
+module "argocd" {
+  source = "../../modules/argocd"
+
+  additional_values = [
+    yamlencode({
+      configs = {
+        cm = {
+          "admin.enabled" = true
+        }
+      }
+    })
+  ]
+}
+```
+
+Do not place passwords, access tokens, private keys, or other secrets directly in `additional_values`, because Terraform values may be stored in Terraform state.
+
+## CRD Lifecycle
+
+The module supports two CRD settings:
+
+```hcl
+install_crds = true
+keep_crds    = true
+```
+
+`install_crds` controls whether the Argo CD Helm chart installs the Argo CD CRDs.
+
+`keep_crds` controls whether those CRDs remain after the Helm release is uninstalled.
+
+For a disposable development cluster, the calling environment may choose:
+
+```hcl
+keep_crds = false
+```
+
+For a persistent production environment, retaining CRDs may provide additional protection against accidental deletion.
+
+## Accessing Argo CD
+
+With the default `ClusterIP` Service, Argo CD is not exposed publicly.
+
+Forward the local port:
+
+```bash
+kubectl port-forward \
+  -n argocd \
+  svc/argocd-server \
+  8080:443
+```
+
+Open:
+
+```text
+https://localhost:8080
+```
+
+Retrieve the initial administrator password:
+
+```bash
+kubectl get secret argocd-initial-admin-secret \
+  -n argocd \
+  -o jsonpath='{.data.password}' \
+  | base64 --decode
+
+echo
+```
+
+The initial username is:
+
+```text
+admin
+```
+
+## Validation
+
+Check the Helm release:
+
+```bash
+helm list -n argocd
+helm status argocd -n argocd
+```
+
+Check the Argo CD resources:
+
+```bash
+kubectl get pods -n argocd
+kubectl get services -n argocd
+kubectl get deployments,statefulsets -n argocd
+```
+
+Check the CRDs:
+
+```bash
+kubectl get crd | grep argoproj.io
+```
+
+Expected CRDs include resources for:
+
+* Applications
+* ApplicationSets
+* AppProjects
+
+## Destruction
+
+Terraform should remove the Helm release before deleting the namespace.
+
+Expected destruction flow:
+
+```text
+Helm release removed
+        ↓
+Argo CD workloads removed
+        ↓
+Terraform-managed namespace removed
+```
+
+If `keep_crds = true`, Argo CD CRDs may remain until the Kubernetes cluster itself is deleted.
+
+## Security
+
+This module does not store:
+
+* Argo CD administrator passwords
+* GitHub tokens
+* SSH private keys
+* AWS credentials
+* Kubernetes bearer tokens
+
+Authentication to the Kubernetes cluster is configured by the calling Terraform root through the Helm and Kubernetes providers.
+
+## Ownership Boundary
+
+Terraform owns:
+
+* The Argo CD namespace
+* The Argo CD Helm release
+* The Argo CD bootstrap lifecycle
+
+Argo CD will later own:
+
+* External Secrets Operator
+* Application deployments
+* Monitoring components
+* Ingress components
+* Other GitOps-managed Kubernetes resources
+
+Terraform and Argo CD must not manage the same Kubernetes resource.
