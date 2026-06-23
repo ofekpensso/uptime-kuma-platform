@@ -44,4 +44,14 @@ module "argocd" {
   redis_ha_enabled         = var.argocd_redis_ha_enabled
 
   labels = local.common_labels
+
+  additional_values = [
+    yamlencode({
+      extraObjects = [
+        yamldecode(
+          file("${path.root}/../../../gitops/bootstrap/root-application.yaml")
+        )
+      ]
+    })
+  ]
 }
