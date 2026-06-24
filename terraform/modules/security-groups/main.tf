@@ -105,42 +105,6 @@ resource "aws_vpc_security_group_egress_rule" "eks_all_outbound" {
 }
 
 # =========================================================
-# RDS Security Group
-# Database is private and only accessible from EKS
-# =========================================================
-
-resource "aws_security_group" "rds" {
-  name        = "${local.name_prefix}-rds-sg"
-  description = "Security group for private RDS PostgreSQL"
-  vpc_id      = var.vpc_id
-
-  tags = merge(
-    local.common_tags,
-    {
-      Name = "${local.name_prefix}-rds-sg"
-    }
-  )
-}
-
-resource "aws_vpc_security_group_ingress_rule" "rds_from_eks_nodes" {
-  security_group_id = aws_security_group.rds.id
-
-  description                  = "Allow MariaDB traffic from EKS worker nodes"
-  from_port                    = var.rds_port
-  to_port                      = var.rds_port
-  ip_protocol                  = "tcp"
-  referenced_security_group_id = var.eks_node_security_group_id
-}
-
-resource "aws_vpc_security_group_egress_rule" "rds_all_outbound" {
-  security_group_id = aws_security_group.rds.id
-
-  description = "Allow all outbound traffic from RDS"
-  ip_protocol = "-1"
-  cidr_ipv4   = "0.0.0.0/0"
-}
-
-# =========================================================
 # VPC Endpoints Security Group
 # Used by Interface Endpoints such as ECR and Secrets Manager
 # =========================================================

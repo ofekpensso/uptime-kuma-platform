@@ -53,11 +53,6 @@ output "eks_security_group_id" {
   value       = module.security_groups.eks_security_group_id
 }
 
-output "rds_security_group_id" {
-  description = "ID of the RDS security group."
-  value       = module.security_groups.rds_security_group_id
-}
-
 output "vpc_endpoints_security_group_id" {
   description = "ID of the VPC Endpoints security group."
   value       = module.security_groups.vpc_endpoints_security_group_id
@@ -91,16 +86,6 @@ output "eks_node_security_group_id" {
 output "eks_oidc_provider_arn" {
   description = "EKS OIDC provider ARN for IRSA."
   value       = module.eks.oidc_provider_arn
-}
-
-output "rds_endpoint" {
-  description = "RDS endpoint."
-  value       = module.rds.db_instance_endpoint
-}
-
-output "rds_secret_arn" {
-  description = "RDS credentials secret ARN."
-  value       = module.rds_secret.secret_arn
 }
 
 output "ecr_repository_name" {

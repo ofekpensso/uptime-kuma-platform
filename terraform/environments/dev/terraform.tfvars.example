@@ -35,9 +35,6 @@ enable_s3_gateway_endpoint = true
 # Uptime Kuma default application port
 app_port = 3001
 
-# PostgreSQL default port
-database_port = 5432
-
 # Public ALB access
 # Lab setup: open to the internet.
 # Production: restrict if possible, or use WAF.
@@ -88,19 +85,6 @@ eks_spot_instance_types = [
 
 eks_authentication_mode = "API_AND_CONFIG_MAP"  
 ]
-
-# RDS
-db_engine                  = "mariadb"
-db_engine_version          = null
-db_instance_class          = "db.t4g.micro"
-db_allocated_storage       = 20
-db_max_allocated_storage   = 50
-db_name                    = "uptimekuma"
-db_username                = "uptimekuma_admin"
-db_port                    = 3306
-db_multi_az                = false
-db_backup_retention_period = 1
-db_deletion_protection     = false
 
 # ECR
 ecr_repository_name      = "uptime-kuma"

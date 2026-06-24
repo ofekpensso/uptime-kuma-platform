@@ -58,7 +58,7 @@ Outbound:
 
 The security model follows a least-privilege approach:
 
-Internet -> ALB -> EKS -> RDS
+Internet -> ALB -> EKS 
 
 The database is never exposed publicly.
 
