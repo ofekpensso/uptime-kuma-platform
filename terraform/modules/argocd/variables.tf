@@ -166,3 +166,39 @@ variable "additional_values" {
   type        = list(string)
   default     = []
 }
+
+variable "bootstrap_enabled" {
+  description = "Whether to install the Argo CD bootstrap applications Helm release."
+  type        = bool
+  default     = false
+}
+
+variable "bootstrap_release_name" {
+  description = "Helm release name for the Argo CD bootstrap applications."
+  type        = string
+  default     = "argocd-bootstrap"
+}
+
+variable "bootstrap_chart_repository" {
+  description = "Helm repository containing the argocd-apps chart."
+  type        = string
+  default     = "https://argoproj.github.io/argo-helm"
+}
+
+variable "bootstrap_chart_name" {
+  description = "Helm chart used to create the bootstrap Argo CD Applications."
+  type        = string
+  default     = "argocd-apps"
+}
+
+variable "bootstrap_chart_version" {
+  description = "Pinned version of the argocd-apps Helm chart."
+  type        = string
+  default     = "2.0.5"
+}
+
+variable "bootstrap_values" {
+  description = "Additional values files rendered as strings for the argocd-apps release."
+  type        = list(string)
+  default     = []
+}

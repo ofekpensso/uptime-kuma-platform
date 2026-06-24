@@ -45,13 +45,11 @@ module "argocd" {
 
   labels = local.common_labels
 
-  additional_values = [
-    yamlencode({
-      extraObjects = [
-        yamldecode(
-          file("${path.root}/../../../gitops/bootstrap/root-application.yaml")
-        )
-      ]
-    })
+  bootstrap_enabled       = var.argocd_bootstrap_enabled
+  bootstrap_release_name  = var.argocd_bootstrap_release_name
+  bootstrap_chart_version = var.argocd_bootstrap_chart_version
+
+  bootstrap_values = [
+    file("${path.root}/../../../gitops/bootstrap/argocd-apps-values.yaml")
   ]
 }

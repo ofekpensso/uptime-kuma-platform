@@ -44,6 +44,29 @@ resource "kubernetes_namespace_v1" "this" {
   }
 }
 
+resource "helm_release" "bootstrap" {
+  count = var.bootstrap_enabled ? 1 : 0
+
+  name       = var.bootstrap_release_name
+  namespace  = var.namespace
+  repository = var.bootstrap_chart_repository
+  chart      = var.bootstrap_chart_name
+  version    = var.bootstrap_chart_version
+
+  create_namespace = false
+
+  wait            = var.wait
+  timeout         = var.timeout_seconds
+  cleanup_on_fail = var.cleanup_on_fail
+  max_history     = var.max_history
+
+  values = var.bootstrap_values
+
+  depends_on = [
+    helm_release.this
+  ]
+}
+
 resource "helm_release" "this" {
   name       = var.release_name
   repository = var.chart_repository

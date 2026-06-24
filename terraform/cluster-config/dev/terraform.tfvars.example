@@ -27,3 +27,7 @@ argocd_server_replicas          = 1
 argocd_repo_server_replicas     = 1
 argocd_application_set_replicas = 1
 argocd_redis_ha_enabled         = false
+
+argocd_bootstrap_enabled       = true
+argocd_bootstrap_release_name  = "argocd-bootstrap"
+argocd_bootstrap_chart_version = "2.0.5"

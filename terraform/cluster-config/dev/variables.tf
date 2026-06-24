@@ -174,3 +174,19 @@ variable "argocd_redis_ha_enabled" {
   type        = bool
   default     = false
 }
+
+
+variable "argocd_bootstrap_enabled" {
+  description = "Whether to install the Argo CD root bootstrap application."
+  type        = bool
+}
+
+variable "argocd_bootstrap_release_name" {
+  description = "Helm release name for Argo CD bootstrap applications."
+  type        = string
+}
+
+variable "argocd_bootstrap_chart_version" {
+  description = "Pinned version of the argocd-apps Helm chart."
+  type        = string
+}
