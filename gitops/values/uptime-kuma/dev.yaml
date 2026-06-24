@@ -58,11 +58,15 @@ ingress:
       Environment=dev,
       Application=uptime-kuma,
       ManagedBy=aws-load-balancer-controller
-      
+
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
     alb.ingress.kubernetes.io/backend-protocol: HTTP
+    
+    alb.ingress.kubernetes.io/load-balancer-attributes: >-
+      routing.http.preserve_host_header.enabled=true,
+      idle_timeout.timeout_seconds=3600
 
     alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
     alb.ingress.kubernetes.io/healthcheck-port: traffic-port
