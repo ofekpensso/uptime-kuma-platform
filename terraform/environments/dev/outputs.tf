@@ -112,3 +112,24 @@ output "github_oidc_provider_arn" {
   description = "GitHub OIDC provider ARN."
   value       = module.github_oidc.github_oidc_provider_arn
 }
+
+output "aws_load_balancer_controller_role_arn" {
+  description = "IAM role ARN used by AWS Load Balancer Controller."
+  value = (
+    module.aws_load_balancer_controller_pod_identity.role_arn
+  )
+}
+
+output "aws_load_balancer_controller_policy_arn" {
+  description = "IAM policy ARN used by AWS Load Balancer Controller."
+  value = (
+    module.aws_load_balancer_controller_pod_identity.policy_arn
+  )
+}
+
+output "aws_load_balancer_controller_pod_identity_association_id" {
+  description = "EKS Pod Identity association ID for the controller."
+  value = (
+    module.aws_load_balancer_controller_pod_identity.association_id
+  )
+}

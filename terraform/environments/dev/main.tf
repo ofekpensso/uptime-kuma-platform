@@ -145,3 +145,27 @@ module "external_secrets_pod_identity" {
 
   secret_arns = ["*"]
 }
+
+module "aws_load_balancer_controller_pod_identity" {
+  source = "../../modules/aws-load-balancer-controller-pod-identity"
+
+  cluster_name = module.eks.cluster_name
+
+  namespace = (
+    var.aws_load_balancer_controller_namespace
+  )
+
+  service_account_name = (
+    var.aws_load_balancer_controller_service_account_name
+  )
+
+  role_name = (
+    "${local.name_prefix}-aws-load-balancer-controller-role"
+  )
+
+  policy_name = (
+    "${local.name_prefix}-aws-load-balancer-controller-policy"
+  )
+
+  tags = local.common_tags
+}

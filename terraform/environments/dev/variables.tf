@@ -233,3 +233,43 @@ variable "github_branch" {
   description = "GitHub branch allowed to assume the AWS IAM role."
   type        = string
 }
+
+# -----------------------------------------------------------------------------
+# AWS Load Balancer Controller
+# -----------------------------------------------------------------------------
+
+variable "aws_load_balancer_controller_namespace" {
+  description = "Kubernetes namespace where AWS Load Balancer Controller runs."
+  type        = string
+  default     = "kube-system"
+
+  validation {
+    condition = (
+      length(trimspace(
+        var.aws_load_balancer_controller_namespace
+      )) > 0
+    )
+
+    error_message = (
+      "aws_load_balancer_controller_namespace must not be empty."
+    )
+  }
+}
+
+variable "aws_load_balancer_controller_service_account_name" {
+  description = "ServiceAccount used by AWS Load Balancer Controller."
+  type        = string
+  default     = "aws-load-balancer-controller"
+
+  validation {
+    condition = (
+      length(trimspace(
+        var.aws_load_balancer_controller_service_account_name
+      )) > 0
+    )
+
+    error_message = (
+      "aws_load_balancer_controller_service_account_name must not be empty."
+    )
+  }
+}

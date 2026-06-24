@@ -1,0 +1,33 @@
+clusterName: uptime-kuma-dev-eks
+
+region: us-east-1
+
+vpcTags:
+  Project: uptime-kuma
+  Environment: dev
+
+serviceAccount:
+  create: true
+  name: aws-load-balancer-controller
+  annotations: {}
+
+defaultTargetType: ip
+
+replicaCount: 2
+
+podDisruptionBudget:
+  maxUnavailable: 1
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+defaultTags:
+  Project: uptime-kuma
+  Environment: dev
+  ManagedBy: aws-load-balancer-controller
+  Owner: ofek
