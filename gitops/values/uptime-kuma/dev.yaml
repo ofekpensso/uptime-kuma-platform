@@ -1,0 +1,50 @@
+---
+replicaCount: 1
+
+image:
+  repository: 478468080341.dkr.ecr.us-east-1.amazonaws.com/uptime-kuma
+  tag: sha-4240189acfec3bb33f8d08da135626194e5ad207
+  pullPolicy: IfNotPresent
+
+serviceAccount:
+  create: true
+  automountServiceAccountToken: false
+
+podLabels:
+  project: uptime-kuma
+  environment: dev
+  managed-by: argocd
+
+service:
+  type: ClusterIP
+  port: 3001
+  targetPort: 3001
+
+headlessService:
+  enabled: true
+  port: 3001
+
+persistence:
+  enabled: true
+  existingClaim: ""
+  storageClass: gp3
+  accessModes:
+    - ReadWriteOnce
+  size: 5Gi
+  mountPath: /app/data
+
+  retentionPolicy:
+    enabled: true
+    whenDeleted: Delete
+    whenScaled: Retain
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+ingress:
+  enabled: false
