@@ -51,6 +51,14 @@ ingress:
   className: alb
 
   annotations:
+    alb.ingress.kubernetes.io/load-balancer-name: uptime-kuma-dev-alb
+
+    alb.ingress.kubernetes.io/tags: >-
+      Project=uptime-kuma,
+      Environment=dev,
+      Application=uptime-kuma,
+      ManagedBy=aws-load-balancer-controller
+      
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
