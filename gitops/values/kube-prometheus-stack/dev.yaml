@@ -1,0 +1,167 @@
+---
+commonLabels:
+  project: uptime-kuma
+  environment: dev
+  managed-by: argocd
+
+kubeEtcd:
+  enabled: false
+
+kubeControllerManager:
+  enabled: false
+
+kubeScheduler:
+  enabled: false
+
+defaultRules:
+  create: true
+
+  rules:
+    etcd: false
+    kubeControllerManager: false
+    kubeSchedulerAlerting: false
+    kubeSchedulerRecording: false
+    windows: false
+
+alertmanager:
+  enabled: true
+
+  alertmanagerSpec:
+    replicas: 1
+    retention: 120h
+
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        cpu: 200m
+        memory: 256Mi
+
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Delete
+      whenScaled: Retain
+
+    storage:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp3
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 2Gi
+
+grafana:
+  enabled: true
+
+  defaultDashboardsEnabled: true
+  defaultDashboardsEditable: false
+
+  service:
+    type: ClusterIP
+
+  persistence:
+    enabled: false
+
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      labelValue: "1"
+      searchNamespace: ALL
+
+      provider:
+        allowUiUpdates: false
+
+  grafana.ini:
+    analytics:
+      reporting_enabled: false
+      check_for_updates: false
+
+    security:
+      disable_gravatar: true
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+  testFramework:
+    enabled: false
+
+prometheus:
+  enabled: true
+
+  service:
+    type: ClusterIP
+
+  prometheusSpec:
+    replicas: 1
+
+    retention: 5d
+    scrapeInterval: 30s
+    evaluationInterval: 30s
+    walCompression: true
+
+    resources:
+      requests:
+        cpu: 300m
+        memory: 768Mi
+      limits:
+        cpu: "1"
+        memory: 1536Mi
+
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Delete
+      whenScaled: Retain
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: gp3
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 10Gi
+
+    serviceMonitorSelectorNilUsesHelmValues: true
+    podMonitorSelectorNilUsesHelmValues: true
+    ruleSelectorNilUsesHelmValues: true
+    probeSelectorNilUsesHelmValues: true
+
+    serviceMonitorNamespaceSelector: {}
+    podMonitorNamespaceSelector: {}
+    ruleNamespaceSelector: {}
+    probeNamespaceSelector: {}
+
+prometheusOperator:
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi
+
+prometheus-node-exporter:
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 128Mi
