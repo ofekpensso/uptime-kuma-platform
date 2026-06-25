@@ -31,3 +31,13 @@ defaultTags:
   Environment: dev
   ManagedBy: aws-load-balancer-controller
   Owner: ofek
+
+serviceMonitor:
+  enabled: true
+  namespace: monitoring
+
+  additionalLabels:
+    release: kube-prometheus-stack
+
+  interval: 30s
+  scrapeTimeout: 10s
