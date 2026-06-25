@@ -1,0 +1,88 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: aws-load-balancer-controller-alerts
+  namespace: monitoring
+
+  labels:
+    release: kube-prometheus-stack
+
+    app.kubernetes.io/name: aws-load-balancer-controller-alerts
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+    managed-by: argocd
+
+spec:
+  groups:
+    - name: aws-load-balancer-controller.rules
+
+      rules:
+        - alert: AWSLoadBalancerControllerMetricsAbsent
+
+          expr: |
+            absent(
+              up{
+                job="aws-load-balancer-controller"
+              }
+            )
+
+          for: 5m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: aws-load-balancer-controller
+
+          annotations:
+            summary: AWS Load Balancer Controller metrics are missing
+            description: >-
+              Prometheus has not discovered any metrics targets for the
+              AWS Load Balancer Controller for at least five minutes.
+
+        - alert: AWSLoadBalancerControllerTargetDown
+
+          expr: |
+            min(
+              up{
+                job="aws-load-balancer-controller"
+              }
+            ) == 0
+
+          for: 5m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: aws-load-balancer-controller
+
+          annotations:
+            summary: An AWS Load Balancer Controller metrics target is down
+            description: >-
+              At least one AWS Load Balancer Controller pod has failed
+              Prometheus scraping for at least five minutes.
+
+        - alert: AWSLoadBalancerControllerReconcileErrors
+
+          expr: |
+            sum(
+              rate(
+                controller_runtime_reconcile_errors_total{
+                  job="aws-load-balancer-controller"
+                }[5m]
+              )
+            ) > 0
+
+          for: 10m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: aws-load-balancer-controller
+
+          annotations:
+            summary: AWS Load Balancer Controller reconciliation errors detected
+            description: >-
+              The AWS Load Balancer Controller has been reporting
+              reconciliation errors for at least ten minutes.
