@@ -42,8 +42,11 @@ module "argocd" {
   repo_server_replicas     = var.argocd_repo_server_replicas
   application_set_replicas = var.argocd_application_set_replicas
   redis_ha_enabled         = var.argocd_redis_ha_enabled
+  labels                   = local.common_labels
 
-  labels = local.common_labels
+  additional_values = [
+    file("${path.module}/argocd-monitoring-values.yaml")
+  ]
 
   bootstrap_enabled       = var.argocd_bootstrap_enabled
   bootstrap_release_name  = var.argocd_bootstrap_release_name
