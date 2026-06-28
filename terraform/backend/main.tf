@@ -93,3 +93,19 @@ module "ses_alerting" {
     }
   )
 }
+
+module "grafana_admin_credentials" {
+  source = "../modules/grafana-admin-credentials"
+
+  secret_name      = "${var.project_name}/${var.environment}/grafana-admin-credentials"
+  admin_user       = "admin"
+  password_length  = 32
+  password_version = 1
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "grafana-admin-credentials"
+    }
+  )
+}

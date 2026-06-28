@@ -42,3 +42,18 @@ output "alertmanager_smtp_secret_arn" {
   description = "ARN of the Alertmanager SMTP credentials secret."
   value       = module.ses_alerting.secret_arn
 }
+
+output "grafana_admin_secret_name" {
+  description = "Secrets Manager secret containing Grafana admin credentials."
+  value       = module.grafana_admin_credentials.secret_name
+}
+
+output "grafana_admin_secret_arn" {
+  description = "ARN of the Grafana admin credentials secret."
+  value       = module.grafana_admin_credentials.secret_arn
+}
+
+output "grafana_admin_user" {
+  description = "Grafana administrator username."
+  value       = module.grafana_admin_credentials.admin_user
+}
