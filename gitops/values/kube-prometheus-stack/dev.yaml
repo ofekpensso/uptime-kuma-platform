@@ -27,6 +27,9 @@ alertmanager:
   enabled: true
 
   alertmanagerSpec:
+    useExistingSecret: true
+    configSecret: alertmanager-ses-config
+    
     replicas: 1
     retention: 120h
 
