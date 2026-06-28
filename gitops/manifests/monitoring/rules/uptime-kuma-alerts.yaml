@@ -1,0 +1,143 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: uptime-kuma-alerts
+  namespace: monitoring
+
+  labels:
+    release: kube-prometheus-stack
+    app.kubernetes.io/name: uptime-kuma-alerts
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+    managed-by: argocd
+
+spec:
+  groups:
+    - name: uptime-kuma.availability.rules
+
+      rules:
+        - alert: UptimeKumaMetricsTargetMissing
+
+          expr: |
+            absent(
+              up{
+                namespace="uptime-kuma",
+                service="uptime-kuma"
+              }
+            )
+
+          for: 5m
+
+          labels:
+            severity: critical
+            environment: dev
+            component: uptime-kuma
+
+          annotations:
+            summary: Uptime Kuma metrics target is missing
+            description: >-
+              Prometheus has not discovered the Uptime Kuma metrics
+              target for at least five minutes. Check the ServiceMonitor,
+              Service labels and Prometheus configuration.
+
+        - alert: UptimeKumaMetricsTargetDown
+
+          expr: |
+            up{
+              namespace="uptime-kuma",
+              service="uptime-kuma"
+            } == 0
+
+          for: 5m
+
+          labels:
+            severity: critical
+            environment: dev
+            component: uptime-kuma
+
+          annotations:
+            summary: Uptime Kuma metrics target is down
+            description: >-
+              Prometheus has been unable to scrape the Uptime Kuma
+              metrics endpoint at {{ $labels.instance }} for at least
+              five minutes.
+
+        - alert: UptimeKumaMonitorMetricsMissing
+
+          expr: |
+            absent(
+              monitor_status{
+                namespace="uptime-kuma"
+              }
+            )
+            and on()
+            (
+              up{
+                namespace="uptime-kuma",
+                service="uptime-kuma"
+              } == 1
+            )
+
+          for: 10m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: uptime-kuma
+
+          annotations:
+            summary: Uptime Kuma monitor metrics are missing
+            description: >-
+              The Uptime Kuma metrics endpoint is reachable, but no
+              monitor_status metrics have been received for at least
+              ten minutes. Check that at least one monitor is configured
+              and active.
+
+    - name: uptime-kuma.monitor.rules
+
+      rules:
+        - alert: UptimeKumaMonitorDown
+
+          expr: |
+            monitor_status{
+              namespace="uptime-kuma"
+            } == 0
+
+          for: 3m
+
+          labels:
+            severity: critical
+            environment: dev
+            component: uptime-kuma-monitor
+
+          annotations:
+            summary: Uptime Kuma monitor is down
+            description: >-
+              Monitor {{ $labels.monitor_name }} has reported a down
+              status for at least three minutes.
+              Type: {{ $labels.monitor_type }}.
+              URL: {{ $labels.monitor_url }}.
+
+        - alert: UptimeKumaMonitorHighResponseTime
+
+          expr: |
+            monitor_response_time{
+              namespace="uptime-kuma"
+            } > 2000
+
+          for: 10m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: uptime-kuma-monitor
+
+          annotations:
+            summary: Uptime Kuma monitor response time is high
+            description: >-
+              Monitor {{ $labels.monitor_name }} has reported a response
+              time above 2000 milliseconds for at least ten minutes.
+              Current value: {{ printf "%.0f" $value }} milliseconds.
+              URL: {{ $labels.monitor_url }}.
