@@ -23,3 +23,20 @@ resources:
 
 serviceMonitor:
   enabled: false
+
+metrics:
+  service:
+    enabled: true
+    port: 8080
+
+webhook:
+  metrics:
+    service:
+      enabled: true
+      port: 8080
+
+certController:
+  metrics:
+    service:
+      enabled: true
+      port: 8080
