@@ -32,3 +32,13 @@ variable "noncurrent_version_expiration_days" {
   type        = number
   default     = 90
 }
+
+variable "alertmanager_email" {
+  description = "Email address verified in SES and used by Alertmanager."
+  type        = string
+
+  validation {
+    condition     = can(regex("^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", var.alertmanager_email))
+    error_message = "alertmanager_email must be a valid email address."
+  }
+}

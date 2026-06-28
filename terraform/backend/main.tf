@@ -77,3 +77,19 @@ resource "aws_s3_bucket_lifecycle_configuration" "terraform_state" {
 
   depends_on = [aws_s3_bucket_versioning.terraform_state]
 }
+
+module "ses_alerting" {
+  source = "../modules/ses-alerting"
+
+  aws_region    = var.aws_region
+  sender_email  = var.alertmanager_email
+  iam_user_name = "${var.project_name}-${var.environment}-alertmanager-ses-smtp"
+  secret_name   = "${var.project_name}/${var.environment}/alertmanager-ses-smtp"
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "ses-alerting"
+    }
+  )
+}
