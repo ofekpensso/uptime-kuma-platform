@@ -3,7 +3,7 @@ replicaCount: 1
 
 image:
   repository: 478468080341.dkr.ecr.us-east-1.amazonaws.com/uptime-kuma
-  tag: sha-c4f37b366abf887f1d5c83166ab9d502930e1fd8
+  tag: sha-846f3d4b331d26a303474683d3f3a0c2383b0c41
   pullPolicy: IfNotPresent
 
 serviceAccount:
