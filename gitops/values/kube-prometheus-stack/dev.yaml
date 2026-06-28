@@ -29,7 +29,7 @@ alertmanager:
   alertmanagerSpec:
     useExistingSecret: true
     configSecret: alertmanager-ses-config
-    
+
     replicas: 1
     retention: 120h
 
@@ -57,6 +57,11 @@ alertmanager:
 
 grafana:
   enabled: true
+
+  admin:
+    existingSecret: grafana-admin-credentials
+    userKey: admin-user
+    passwordKey: admin-password
 
   defaultDashboardsEnabled: true
   defaultDashboardsEditable: false
