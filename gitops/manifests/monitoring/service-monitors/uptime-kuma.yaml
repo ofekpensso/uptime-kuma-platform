@@ -34,6 +34,10 @@ spec:
       scrapeTimeout: 10s
 
       basicAuth:
+        username:
+          name: uptime-kuma-prometheus-credentials
+          key: username
+
         password:
           name: uptime-kuma-prometheus-credentials
           key: password
