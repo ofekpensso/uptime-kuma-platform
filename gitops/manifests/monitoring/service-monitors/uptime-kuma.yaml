@@ -25,6 +25,7 @@ spec:
     matchLabels:
       app.kubernetes.io/name: uptime-kuma
       app.kubernetes.io/instance: uptime-kuma
+      monitoring: "enabled"
 
   endpoints:
     - port: http
