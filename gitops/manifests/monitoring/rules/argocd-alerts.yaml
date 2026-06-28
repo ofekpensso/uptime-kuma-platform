@@ -1,0 +1,147 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: argocd-alerts
+  namespace: monitoring
+
+  labels:
+    release: kube-prometheus-stack
+
+    app.kubernetes.io/name: argocd-alerts
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+    managed-by: argocd
+
+spec:
+  groups:
+    - name: argocd.availability.rules
+
+      rules:
+        - alert: ArgoCDMetricsTargetDown
+
+          expr: |
+            up{
+              namespace="argocd"
+            } == 0
+
+          for: 5m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: argocd
+
+          annotations:
+            summary: Argo CD metrics target is down
+            description: >-
+              Prometheus has been unable to scrape the Argo CD target
+              {{ $labels.service }} at {{ $labels.instance }} for at
+              least five minutes.
+
+        - alert: ArgoCDApplicationMetricsAbsent
+
+          expr: |
+            absent(argocd_app_info)
+
+          for: 5m
+
+          labels:
+            severity: critical
+            environment: dev
+            component: argocd
+
+          annotations:
+            summary: Argo CD Application metrics are missing
+            description: >-
+              Prometheus has not received any argocd_app_info metrics
+              for at least five minutes. Application health and sync
+              status cannot currently be monitored.
+
+    - name: argocd.application.rules
+
+      rules:
+        - alert: ArgoCDApplicationOutOfSync
+
+          expr: |
+            argocd_app_info{
+              sync_status!="Synced"
+            } == 1
+
+          for: 15m
+
+          labels:
+            severity: warning
+            environment: dev
+            component: argocd
+
+          annotations:
+            summary: Argo CD Application is out of sync
+            description: >-
+              Application {{ $labels.name }} in project
+              {{ $labels.project }} has remained in sync state
+              {{ $labels.sync_status }} for at least fifteen minutes.
+
+        - alert: ArgoCDApplicationUnhealthy
+
+          expr: |
+            argocd_app_info{
+              health_status=~"Degraded|Missing|Unknown"
+            } == 1
+
+          for: 10m
+
+          labels:
+            severity: critical
+            environment: dev
+            component: argocd
+
+          annotations:
+            summary: Argo CD Application is unhealthy
+            description: >-
+              Application {{ $labels.name }} in project
+              {{ $labels.project }} has remained in health state
+              {{ $labels.health_status }} for at least ten minutes.
+
+        - alert: ArgoCDApplicationSyncFailed
+
+          expr: |
+            increase(
+              argocd_app_sync_total{
+                phase=~"Error|Failed"
+              }[10m]
+            ) > 0
+
+          labels:
+            severity: critical
+            environment: dev
+            component: argocd
+
+          annotations:
+            summary: Argo CD Application sync failed
+            description: >-
+              Application {{ $labels.name }} in project
+              {{ $labels.project }} reported a failed sync operation
+              during the last ten minutes.
+
+    - name: argocd.repository.rules
+
+      rules:
+        - alert: ArgoCDGitFetchFailures
+
+          expr: |
+            increase(
+              argocd_git_fetch_fail_total[10m]
+            ) > 0
+
+          labels:
+            severity: warning
+            environment: dev
+            component: argocd-repo-server
+
+          annotations:
+            summary: Argo CD Git fetch failure detected
+            description: >-
+              The Argo CD repo server reported one or more Git fetch
+              failures during the last ten minutes.
