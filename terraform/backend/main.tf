@@ -170,7 +170,9 @@ module "external_dns_iam" {
   hosted_zone_arn = module.route53_acm.hosted_zone_arn
 
   managed_record_names = [
-    local.application_domain_name
+    local.application_domain_name,
+    "aaaa-${local.application_domain_name}",
+    "cname-${local.application_domain_name}"
   ]
 
   namespace            = var.external_dns_namespace
