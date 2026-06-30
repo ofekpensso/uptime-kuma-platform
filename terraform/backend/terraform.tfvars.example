@@ -11,3 +11,7 @@ state_bucket_name = "uptime-kuma-terraform-state-ofek-CHANGE-ME"
 noncurrent_version_expiration_days = 90
 
 alertmanager_email = "your-email@example.com"
+
+domain_name = "oag-status-page-devops.site"
+
+application_subdomain = "uptime"

@@ -57,3 +57,38 @@ output "grafana_admin_user" {
   description = "Grafana administrator username."
   value       = module.grafana_admin_credentials.admin_user
 }
+
+output "route53_hosted_zone_id" {
+  description = "ID of the Route 53 public hosted zone."
+  value       = module.route53_acm.hosted_zone_id
+}
+
+output "route53_hosted_zone_arn" {
+  description = "ARN of the Route 53 public hosted zone."
+  value       = module.route53_acm.hosted_zone_arn
+}
+
+output "route53_name_servers" {
+  description = "Authoritative Route 53 name servers to configure in Namecheap."
+  value       = module.route53_acm.name_servers
+}
+
+output "application_domain_name" {
+  description = "Public domain name used by Uptime Kuma."
+  value       = local.application_domain_name
+}
+
+output "acm_certificate_arn" {
+  description = "ARN of the validated ACM certificate used by the ALB."
+  value       = module.route53_acm.certificate_arn
+}
+
+output "acm_certificate_status" {
+  description = "Current status of the ACM certificate."
+  value       = module.route53_acm.certificate_status
+}
+
+output "acm_validation_record_fqdns" {
+  description = "DNS records used to validate the ACM certificate."
+  value       = module.route53_acm.validation_record_fqdns
+}

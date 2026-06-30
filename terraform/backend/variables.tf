@@ -42,3 +42,34 @@ variable "alertmanager_email" {
     error_message = "alertmanager_email must be a valid email address."
   }
 }
+
+variable "domain_name" {
+  description = "Public root domain managed by Route 53."
+  type        = string
+
+  validation {
+    condition = (
+      length(trimspace(var.domain_name)) > 0 &&
+      strcontains(var.domain_name, ".")
+    )
+
+    error_message = "domain_name must be a valid public domain, for example example.com."
+  }
+}
+
+variable "application_subdomain" {
+  description = "Subdomain used by the Uptime Kuma application."
+  type        = string
+  default     = "uptime"
+
+  validation {
+    condition = can(
+      regex(
+        "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        lower(trimspace(var.application_subdomain))
+      )
+    )
+
+    error_message = "application_subdomain must be a valid DNS label such as uptime."
+  }
+}

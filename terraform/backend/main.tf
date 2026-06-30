@@ -6,6 +6,24 @@ locals {
     Owner       = var.owner
     Component   = "terraform-backend"
   }
+
+  root_domain_name = trimsuffix(
+    lower(trimspace(var.domain_name)),
+    "."
+  )
+
+  application_subdomain = trimsuffix(
+    lower(trimspace(var.application_subdomain)),
+    "."
+  )
+
+  application_domain_name = join(
+    ".",
+    [
+      local.application_subdomain,
+      local.root_domain_name
+    ]
+  )
 }
 
 resource "aws_s3_bucket" "terraform_state" {
@@ -106,6 +124,21 @@ module "grafana_admin_credentials" {
     local.common_tags,
     {
       Component = "grafana-admin-credentials"
+    }
+  )
+}
+
+module "route53_acm" {
+  source = "../modules/route53-acm"
+
+  domain_name             = local.root_domain_name
+  certificate_domain_name = local.application_domain_name
+  validation_record_ttl   = 300
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "route53-acm"
     }
   )
 }
