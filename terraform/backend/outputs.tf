@@ -92,3 +92,33 @@ output "acm_validation_record_fqdns" {
   description = "DNS records used to validate the ACM certificate."
   value       = module.route53_acm.validation_record_fqdns
 }
+
+output "external_dns_role_name" {
+  description = "Name of the IAM role used by ExternalDNS through EKS Pod Identity."
+  value       = module.external_dns_iam.role_name
+}
+
+output "external_dns_role_arn" {
+  description = "ARN of the IAM role used by ExternalDNS through EKS Pod Identity."
+  value       = module.external_dns_iam.role_arn
+}
+
+output "external_dns_policy_arn" {
+  description = "ARN of the IAM policy that grants ExternalDNS access to Route 53."
+  value       = module.external_dns_iam.policy_arn
+}
+
+output "external_dns_namespace" {
+  description = "Kubernetes namespace in which ExternalDNS runs."
+  value       = module.external_dns_iam.namespace
+}
+
+output "external_dns_service_account_name" {
+  description = "Kubernetes ServiceAccount used by ExternalDNS."
+  value       = module.external_dns_iam.service_account_name
+}
+
+output "external_dns_managed_record_names" {
+  description = "DNS record names that ExternalDNS is allowed to manage."
+  value       = module.external_dns_iam.managed_record_names
+}

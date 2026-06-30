@@ -169,3 +169,21 @@ module "aws_load_balancer_controller_pod_identity" {
 
   tags = local.common_tags
 }
+
+module "external_dns_pod_identity_association" {
+  source = "../../modules/eks-pod-identity-association"
+
+  cluster_name = module.eks.cluster_name
+
+  namespace            = var.external_dns_namespace
+  service_account_name = var.external_dns_service_account_name
+
+  role_arn = data.aws_iam_role.external_dns.arn
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "external-dns-pod-identity"
+    }
+  )
+}

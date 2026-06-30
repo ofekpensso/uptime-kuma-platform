@@ -24,6 +24,24 @@ locals {
       local.root_domain_name
     ]
   )
+
+  external_dns_role_name = join(
+    "-",
+    [
+      var.project_name,
+      var.environment,
+      "external-dns-role"
+    ]
+  )
+
+  external_dns_policy_name = join(
+    "-",
+    [
+      var.project_name,
+      var.environment,
+      "external-dns-policy"
+    ]
+  )
 }
 
 resource "aws_s3_bucket" "terraform_state" {
@@ -139,6 +157,29 @@ module "route53_acm" {
     local.common_tags,
     {
       Component = "route53-acm"
+    }
+  )
+}
+
+module "external_dns_iam" {
+  source = "../modules/external-dns-iam"
+
+  role_name   = local.external_dns_role_name
+  policy_name = local.external_dns_policy_name
+
+  hosted_zone_arn = module.route53_acm.hosted_zone_arn
+
+  managed_record_names = [
+    local.application_domain_name
+  ]
+
+  namespace            = var.external_dns_namespace
+  service_account_name = var.external_dns_service_account_name
+
+  tags = merge(
+    local.common_tags,
+    {
+      Component = "external-dns-iam"
     }
   )
 }

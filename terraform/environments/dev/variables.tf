@@ -273,3 +273,52 @@ variable "aws_load_balancer_controller_service_account_name" {
     )
   }
 }
+
+# -----------------------------------------------------------------------------
+# ExternalDNS
+# -----------------------------------------------------------------------------
+
+variable "external_dns_namespace" {
+  description = "Kubernetes namespace in which ExternalDNS runs."
+  type        = string
+  default     = "external-dns"
+
+  validation {
+    condition = can(
+      regex(
+        "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        var.external_dns_namespace
+      )
+    )
+
+    error_message = "external_dns_namespace must be a valid Kubernetes namespace name."
+  }
+}
+
+variable "external_dns_service_account_name" {
+  description = "Kubernetes ServiceAccount used by ExternalDNS."
+  type        = string
+  default     = "external-dns"
+
+  validation {
+    condition = can(
+      regex(
+        "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        var.external_dns_service_account_name
+      )
+    )
+
+    error_message = "external_dns_service_account_name must be a valid Kubernetes ServiceAccount name."
+  }
+}
+
+variable "external_dns_iam_role_name" {
+  description = "Name of the persistent IAM role used by ExternalDNS."
+  type        = string
+  default     = "uptime-kuma-shared-external-dns-role"
+
+  validation {
+    condition     = length(trimspace(var.external_dns_iam_role_name)) > 0
+    error_message = "external_dns_iam_role_name must not be empty."
+  }
+}

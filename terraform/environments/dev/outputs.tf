@@ -133,3 +133,23 @@ output "aws_load_balancer_controller_pod_identity_association_id" {
     module.aws_load_balancer_controller_pod_identity.association_id
   )
 }
+
+output "external_dns_role_arn" {
+  description = "ARN of the persistent IAM role used by ExternalDNS."
+  value       = data.aws_iam_role.external_dns.arn
+}
+
+output "external_dns_pod_identity_association_id" {
+  description = "ID of the ExternalDNS EKS Pod Identity association."
+  value       = module.external_dns_pod_identity_association.association_id
+}
+
+output "external_dns_namespace" {
+  description = "Kubernetes namespace in which ExternalDNS runs."
+  value       = module.external_dns_pod_identity_association.namespace
+}
+
+output "external_dns_service_account_name" {
+  description = "Kubernetes ServiceAccount used by ExternalDNS."
+  value       = module.external_dns_pod_identity_association.service_account_name
+}

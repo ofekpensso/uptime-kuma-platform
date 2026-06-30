@@ -105,3 +105,7 @@ aws_load_balancer_controller_namespace = "kube-system"
 aws_load_balancer_controller_service_account_name = (
   "aws-load-balancer-controller"
 )
+
+external_dns_namespace            = "external-dns"
+external_dns_service_account_name = "external-dns"
+external_dns_iam_role_name        = "uptime-kuma-shared-external-dns-role"

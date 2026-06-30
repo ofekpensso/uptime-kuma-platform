@@ -73,3 +73,37 @@ variable "application_subdomain" {
     error_message = "application_subdomain must be a valid DNS label such as uptime."
   }
 }
+
+variable "external_dns_namespace" {
+  description = "Kubernetes namespace in which ExternalDNS runs."
+  type        = string
+  default     = "external-dns"
+
+  validation {
+    condition = can(
+      regex(
+        "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        var.external_dns_namespace
+      )
+    )
+
+    error_message = "external_dns_namespace must be a valid Kubernetes namespace name."
+  }
+}
+
+variable "external_dns_service_account_name" {
+  description = "Kubernetes ServiceAccount used by ExternalDNS."
+  type        = string
+  default     = "external-dns"
+
+  validation {
+    condition = can(
+      regex(
+        "^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?$",
+        var.external_dns_service_account_name
+      )
+    )
+
+    error_message = "external_dns_service_account_name must be a valid Kubernetes ServiceAccount name."
+  }
+}
