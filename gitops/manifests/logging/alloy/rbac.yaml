@@ -1,0 +1,58 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+
+metadata:
+  name: alloy-logs-reader
+
+  labels:
+    app.kubernetes.io/name: alloy
+    app.kubernetes.io/component: log-collector
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+
+rules:
+  - apiGroups:
+      - ""
+
+    resources:
+      - pods
+      - namespaces
+      - nodes
+
+    verbs:
+      - get
+      - list
+      - watch
+
+  - apiGroups:
+      - ""
+
+    resources:
+      - pods/log
+
+    verbs:
+      - get
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+
+metadata:
+  name: alloy-logs-reader
+
+  labels:
+    app.kubernetes.io/name: alloy
+    app.kubernetes.io/component: log-collector
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: alloy-logs-reader
+
+subjects:
+  - kind: ServiceAccount
+    name: alloy
+    namespace: logging

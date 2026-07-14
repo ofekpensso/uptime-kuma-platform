@@ -1,0 +1,85 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+
+metadata:
+  name: alloy
+  namespace: logging
+
+  labels:
+    app.kubernetes.io/name: alloy
+    app.kubernetes.io/component: log-collector
+    app.kubernetes.io/part-of: uptime-kuma-platform
+    environment: dev
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: alloy
+      app.kubernetes.io/component: log-collector
+
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: alloy
+        app.kubernetes.io/component: log-collector
+        app.kubernetes.io/part-of: uptime-kuma-platform
+        environment: dev
+
+    spec:
+      serviceAccountName: alloy
+
+      securityContext:
+        fsGroup: 473
+
+      containers:
+        - name: alloy
+          image: grafana/alloy:v1.17.1
+          imagePullPolicy: IfNotPresent
+
+          args:
+            - run
+            - /etc/alloy/config.alloy
+            - --server.http.listen-addr=0.0.0.0:12345
+            - --storage.path=/var/lib/alloy
+
+          ports:
+            - name: http
+              containerPort: 12345
+
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+
+            limits:
+              cpu: 300m
+              memory: 384Mi
+
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            runAsNonRoot: true
+            runAsUser: 473
+            runAsGroup: 473
+            capabilities:
+              drop:
+                - ALL
+
+          volumeMounts:
+            - name: alloy-config
+              mountPath: /etc/alloy
+              readOnly: true
+
+            - name: alloy-data
+              mountPath: /var/lib/alloy
+
+      volumes:
+        - name: alloy-config
+          configMap:
+            name: alloy-config
+
+        - name: alloy-data
+          emptyDir: {}
