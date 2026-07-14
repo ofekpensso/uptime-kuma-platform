@@ -71,6 +71,7 @@ data:
         separator    = "/"
         target_label = "job"
       }
+    }
 
     loki.source.kubernetes "pod_logs" {
       targets    = discovery.relabel.pod_logs.output
