@@ -15,7 +15,7 @@ environment while still following real-world DevOps practices.
 
 ## Architecture
 
-![Uptime Kuma DevOps Platform Architecture](docs/images/architecture-diagram.png)
+![Uptime Kuma DevOps Platform Architecture](docs/images/architecture diagram.png)
 
 ---
 
